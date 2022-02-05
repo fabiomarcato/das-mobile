@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'client/main_client.dart';
-import 'order/main_order.dart';
-import 'product/main_product.dart';
+import 'main_client.dart';
+import 'main_order.dart';
+import 'main_product.dart';
+import 'list_orders.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +30,7 @@ class MyStatelessWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 1,
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: const TabBar(
@@ -45,6 +46,9 @@ class MyStatelessWidget extends StatelessWidget {
               ),
               Tab(
                 icon: Icon(Icons.receipt_long),
+              ),
+              Tab(
+                icon: Icon(Icons.checklist),
               ),
             ],
           ),
@@ -69,7 +73,10 @@ class MyStatelessWidget extends StatelessWidget {
             ),
             Center(
               child: HomeOrder(),
-            )
+            ),
+            Center(
+              child: ListOrder(),
+            ),
           ],
         ),
       ),
