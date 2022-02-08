@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'main_client.dart';
-import 'main_order.dart';
-import 'main_product.dart';
-import 'list_orders.dart';
+import 'view/main_client.dart';
+import 'view/main_order.dart';
+import 'view/main_product.dart';
+import 'view/list_orders.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Das Mobile',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
