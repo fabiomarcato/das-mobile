@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class OrderRest {
   Future<List<Order>> getOrders() async {
     final http.Response response =
-        await http.get(Uri.http(API.endpoint, "pedidos"));
+        await http.get(Uri.http(API.baseUrl, API.endpointOrders));
     if (response.statusCode == 200) {
       return Order.fromJsonList(response.body);
     } else {
@@ -15,7 +15,7 @@ class OrderRest {
 
   Future<Order> insertOrder(Order order) async {
     final http.Response response =
-        await http.post(Uri.http(API.endpoint, 'pedidos'),
+        await http.post(Uri.http(API.baseUrl, API.endpointOrders),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },

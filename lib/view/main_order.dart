@@ -17,8 +17,9 @@ class HomeOrder extends StatelessWidget {
               final order = snapshot.data?[index];
               return ListTile(
                 title: Text(order?.date! as String),
-                subtitle: Text('order.description'),
-                trailing: Text('dsadsadsa'),
+                subtitle: Text("${order?.orderId}"),
+                trailing: Text('Teste'),
+                leading: Text('Teste'),
               );
             },
           );
@@ -27,11 +28,4 @@ class HomeOrder extends StatelessWidget {
       },
     );
   }
-}
-
-Future<List<Order>> _getAll() async {
-  List<Order> tempLista = <Order>[];
-  OrderRepository repository = OrderRepository();
-  tempLista = await repository.getOrders();
-  return tempLista;
 }
