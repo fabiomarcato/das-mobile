@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Client {
   String? cpf;
   String? name;
@@ -21,4 +23,14 @@ class Client {
     data['id'] = this.id;
     return data;
   }
+
+  static List<Client> fromJsonList(String j) {
+    final parsed = jsonDecode(j).cast<Map<String, dynamic>>();
+    return parsed.map<Client>((map) => Client.fromJson(map)).toList();
+  }
+
+  @override
+  String toString() {
+    return 'Cliente{CPF: $cpf, Nome: $name, SobreNome: $lastName}';
+  } 
 }
