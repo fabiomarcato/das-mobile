@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'api.dart';
 import '../model/order.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +12,16 @@ class OrderRest {
       return Order.fromJsonList(response.body);
     } else {
       throw Exception('Erro buscando todos os pedidos.');
+    }
+  }
+
+  Future<List<Order>> getClientOrders(String cpf) async {
+    final http.Response response =
+        await http.get(Uri.http(API.baseUrl, API.endpointOrders));
+    if (response.statusCode == 200) {
+      return Order.fromJsonList(response.body);
+    } else {
+      throw Exception('Erro buscando pedidos do cliente');
     }
   }
 
