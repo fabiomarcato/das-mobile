@@ -8,7 +8,15 @@ class ClientRepository {
     return await api.getClient();
   }
 
-  Future<Client> insertClient(Client client) async {
+  Future<String> insertClient(Client client) async {
    return await api.insertClient(client);
+  }
+
+    Future<String> deleteClient(int id) async {
+   return await api.DeleteClient(id);
+  }
+
+    Future<String> editClient(Client client, int id) async {
+   return await api.EditClient(client, id);
   }
 }
