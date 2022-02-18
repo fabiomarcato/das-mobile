@@ -1,19 +1,16 @@
 import 'dart:convert';
-
 import 'package:dasmobile/model/client.dart';
 import 'package:flutter/material.dart';
 import '../repositories/client_repository.dart';
-
-import 'dart:convert';
 import '../model/client.dart';
-import 'package:http/http.dart' as http;
+
 
 class HomeClient extends StatelessWidget {
-//const HomeClient({Key? key}) : super(key: key);
+
   final _cpf = TextEditingController();
   final _nome = TextEditingController();
   final _sobreNome = TextEditingController();
-  final _id = TextEditingController();
+  var _id;
   String Retorno = "";
   List<Client> Clientes = [];
 
@@ -21,29 +18,20 @@ class HomeClient extends StatelessWidget {
     final Client NovoCliente = Client(
         cpf: _cpf.text, name: _nome.text, lastName: _sobreNome.text, id: 0);      
     Retorno =  await ClientRepository().insertClient(NovoCliente);
-
     Retorno = json.decode(Retorno)['Status'];
-    
   }
 
   _EditCliente() async {
     final Client NovoCliente = Client(
-        cpf: _cpf.text, name: _nome.text, lastName: _sobreNome.text, id: 0);      
-    Retorno =  await ClientRepository().insertClient(NovoCliente);
-
+        cpf: _cpf.text, name: _nome.text, lastName: _sobreNome.text, id: _id);      
+    Retorno =  await ClientRepository().editClient(NovoCliente,_id);
     Retorno = json.decode(Retorno)['Status'];
-    
   }
-  
+
   _RemoveCliente(int id) async {
-    Retorno = await ClientRepository().deleteClient(id);
-
+    Retorno = await ClientRepository().removeClient(id);
     Retorno = json.decode(Retorno)['Status'];
   }
-
-
-
-
 
   _LimparCampos() async {
     _cpf.text = "";
@@ -55,6 +43,7 @@ class HomeClient extends StatelessWidget {
     _cpf.text = cpf;
     _nome.text = nome;
     _sobreNome.text = sobreNome;
+    _id = id;
   }
 
   @override
@@ -127,8 +116,9 @@ class HomeClient extends StatelessWidget {
                               Row(children: const [Text("")]), //Pula linha
                               Row(children: const [Text("")]), //Pula linha
                               ElevatedButton(
-                                child: const Text('Editar'),
+                                child: const Text('Atualizar'),
                                 onPressed: () async {
+                                 await  _EditCliente();
                                  await  _LimparCampos();
                                   Navigator.pop(context);
 
@@ -147,8 +137,10 @@ class HomeClient extends StatelessWidget {
                               ElevatedButton(
                                 child: const Text('Excluir'),
                                 onPressed: () async {
+                                await  _RemoveCliente(client.id!.toInt());
                                  await  _LimparCampos();
                                   Navigator.pop(context);
+                                  
 
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -185,6 +177,7 @@ class HomeClient extends StatelessWidget {
               action: SnackBarAction(
                 label: "SIM",
                 onPressed: () {
+                  _LimparCampos();
                   showModalBottomSheet<void>(
                     context: context,
                     builder: (BuildContext context) {

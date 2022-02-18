@@ -26,7 +26,7 @@ class ClientRest {
     
   }
 
-      Future<String> DeleteClient(int id) async {
+    Future<String> RemoveClient(int id) async {
     final http.Response response =
         await http.delete(Uri.http(API.baseUrl, API.endpointClient + "/" + id.toString()),
             headers: <String, String>{
