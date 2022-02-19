@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Product {
   String? description;
   int? id;
@@ -10,9 +12,14 @@ class Product {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['descricao'] = this.description;
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['descricao'] = description;
+    data['id'] = id;
     return data;
+  }
+
+  static List<Product> fromJsonList(String j) {
+    final parsed = jsonDecode(j).cast<Map<String, dynamic>>();
+    return parsed.map<Product>((map) => Product.fromJson(map)).toList();
   }
 }
