@@ -17,8 +17,8 @@ class ClientRepository {
     return await api.insertClient(client);
   }
 
-    Future<String> deleteClient(int id) async {
-   return await api.DeleteClient(id);
+    Future<String> removeClient(int id) async {
+   return await api.RemoveClient(id);
   }
 
     Future<String> editClient(Client client, int id) async {
