@@ -8,7 +8,7 @@ class ClientRest {
     final http.Response response =
         await http.get(Uri.http(API.baseUrl, API.endpointClient),
             headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
+              'Content-Type': 'application/json; charset=latin1',
             });
     if (response.statusCode == 200) {
       return Client.fromJsonList(response.body);
@@ -16,6 +16,17 @@ class ClientRest {
       throw Exception('Erro buscando todos os Clientes.');
     }
   }
+
+  Future<Client> getClientByCpf(String cpf) async {
+    final http.Response response = await http
+        .get(Uri.http(API.baseUrl, API.endpointCpfClient + '/' + cpf));
+    if (response.statusCode == 200) {
+      return Client.fromJson(response.body as Map<String, dynamic>);
+    } else {
+      throw Exception('Erro buscando Cliente por CPF.');
+    }
+  }
+
 
   Future<String> insertClient(Client client) async {
     final http.Response response =
