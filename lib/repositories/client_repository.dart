@@ -13,8 +13,8 @@ class ClientRepository {
     return await api.getClientByCpf(cpf);
   }
 
-  Future<Client> insertClient(Client client) async {
-    return await api.insertClient(client);
+  Future<String> insertClient(Client client) async {
+   return await api.insertClient(client);
   }
 
     Future<String> removeClient(int id) async {

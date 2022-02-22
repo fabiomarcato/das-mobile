@@ -6,7 +6,10 @@ import 'package:http/http.dart' as http;
 class ClientRest {
   Future<List<Client>> getClient() async {
     final http.Response response =
-        await http.get(Uri.http(API.baseUrl, API.endpointClient));
+        await http.get(Uri.http(API.baseUrl, API.endpointClient),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=latin1',
+            });
     if (response.statusCode == 200) {
       return Client.fromJsonList(response.body);
     } else {
@@ -25,39 +28,47 @@ class ClientRest {
   }
 
 
-    Future<String> insertClient(Client client) async {
+  Future<String> insertClient(Client client) async {
     final http.Response response =
         await http.post(Uri.http(API.baseUrl, API.endpointClient),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
             body: jsonEncode(client.toJson()));
-            
-      return response.body;
-    
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body)['Status'];
+    } else {
+      return json.decode(response.body)['Erro'];
+    }
   }
 
-    Future<String> RemoveClient(int id) async {
-    final http.Response response =
-        await http.delete(Uri.http(API.baseUrl, API.endpointClient + "/" + id.toString()),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            });
-            
-      return response.body;
-    
+  Future<String> RemoveClient(int id) async {
+    final http.Response response = await http.delete(
+        Uri.http(API.baseUrl, API.endpointClient + "/" + id.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body)['Status'];
+    } else {
+      return json.decode(response.body)['Erro'];
+    }
   }
 
-    Future<String> EditClient(Client client,int id) async {
-    final http.Response response =
-        await http.put(Uri.http(API.baseUrl, API.endpointClient + "/" + id.toString()),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(client.toJson()));
-            
-      return response.body;
-    
+  Future<String> EditClient(Client client, int id) async {
+    final http.Response response = await http.put(
+        Uri.http(API.baseUrl, API.endpointClient + "/" + id.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(client.toJson()));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body)['Status'];
+    } else {
+      return json.decode(response.body)['Erro'];
+    }
   }
-  
 }
