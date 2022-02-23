@@ -20,7 +20,7 @@ class HomeClient extends StatelessWidget {
   _SalvarCliente() async {
     final Client NovoCliente = Client(
         cpf: _cpf.text, name: _nome.text, lastName: _sobreNome.text, id: 0);      
-    Retorno =  await ClientRepository().insertClient(NovoCliente);
+    Retorno =  (await ClientRepository().insertClient(NovoCliente)) as String;
 
     Retorno = json.decode(Retorno)['Status'];
     
@@ -29,7 +29,7 @@ class HomeClient extends StatelessWidget {
   _EditCliente() async {
     final Client NovoCliente = Client(
         cpf: _cpf.text, name: _nome.text, lastName: _sobreNome.text, id: 0);      
-    Retorno =  await ClientRepository().insertClient(NovoCliente);
+    Retorno =  (await ClientRepository().insertClient(NovoCliente)) as String;
 
     Retorno = json.decode(Retorno)['Status'];
     

@@ -17,7 +17,7 @@ class OrderRest {
 
   Future<List<Order>> getClientOrders(String cpf) async {
     final http.Response response =
-        await http.get(Uri.http(API.baseUrl, API.endpointOrders));
+        await http.get(Uri.http(API.baseUrl, API.endpointClientOrders + cpf));
     if (response.statusCode == 200) {
       return Order.fromJsonList(response.body);
     } else {
