@@ -16,15 +16,127 @@ class ListOrder extends StatefulWidget {
 class _ListOrder extends State<ListOrder> {
   final _cpf = TextEditingController();
   List<Order> orders = [];
-  bool _loading = true;
-  bool _pinned = true;
-  bool _snap = false;
-  bool _floating = false;
 
   _loadOrders(cpf) async {
     orders = await OrderRepository().getClientOrders(cpf);
-    _loading = false;
     setState(() {});
+  }
+
+  _dialogBuilder(BuildContext context, orderItem) {
+    List<OrderItems> orderItems = orderItem;
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: 200,
+            child: Center(
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 20.0,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.lightBlue)),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Text('Produto',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            textAlign: TextAlign.center)),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 20.0,
+                    width: 70,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.lightBlue)),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: const Text('Quantidade',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            textAlign: TextAlign.center)),
+                  ),
+                ],
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                    margin: EdgeInsets.only(),
+                    height: 150,
+                    width: 220,
+                    child: ListView.builder(
+                      itemCount: orderItems.length,
+                      itemBuilder: (context, index) => Flexible(
+                          child: Row(
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.lightBlue)),
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                    "${orderItems[index].product?.toJson()['descricao']}",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.black),
+                                    textAlign: TextAlign.center)),
+                          ),
+                          Container(
+                            height: 20,
+                            width: 70,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.lightBlue)),
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                    "${orderItems[index].quantity}",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.black),
+                                    textAlign: TextAlign.center)),
+                          ),
+                        ],
+                      )),
+                    ))
+              ])
+            ]),
+          ));
+        });
+  }
+
+  _showOrder(BuildContext context, orderItem) {
+    List<OrderItems> orderItems = orderItem;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text('ID do cliente:'),
+              content: SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                      itemCount: orderItems.length,
+                      itemBuilder: (context, index) => SizedBox(
+                          height: 200,
+                          child: Row(children: [
+                            Text(
+                                "Descrição: ${orderItems[index].product?.toJson()['descricao']}"),
+                            Text("Descrição: ${orderItems[index].quantity}")
+                          ])))),
+              actions: [
+                TextButton(
+                    child: Text("Fechar"),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // fecha a dialog
+                    })
+              ]);
+        });
   }
 
   @override
@@ -78,77 +190,6 @@ class _ListOrder extends State<ListOrder> {
                 ],
               ),
             ])),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 75,
-            color: Colors.white12,
-            child: Center(
-                child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    height: 20.0,
-                    width: 220,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.lightBlue)),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: Text('Nome Cliente',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                            textAlign: TextAlign.center)),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    height: 20.0,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.lightBlue)),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: const Text('CPF',
-                            style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                            textAlign: TextAlign.center)),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 25.0,
-                    width: 220,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.lightBlue)),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: const Text('-',
-                            style: TextStyle(fontSize: 12, color: Colors.black),
-                            textAlign: TextAlign.center)),
-                  ),
-                  Container(
-                    height: 25.0,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.lightBlue)),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: Text(_cpf.text,
-                            style: TextStyle(fontSize: 12, color: Colors.black),
-                            textAlign: TextAlign.center)),
-                  ),
-                ],
-              )
-            ])),
-          ),
-        ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
@@ -162,7 +203,7 @@ class _ListOrder extends State<ListOrder> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       SizedBox(
-                        child: Text('${order.orderId}'),
+                        child: Text('ID ${order.orderId}'),
                         width: 50,
                       ),
                       SizedBox(
@@ -173,14 +214,16 @@ class _ListOrder extends State<ListOrder> {
                           child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             textStyle: const TextStyle(fontSize: 15)),
-                        onPressed: () async {},
+                        onPressed: () async {
+                          //_showOrder(context, order.orderItems);
+                          _dialogBuilder(context, order.orderItems);
+                        },
                         child: const Text('Ver'),
                       )),
                     ],
                   )),
                 );
               }
-              orders = [];
             },
             childCount: orders.length,
           ),
