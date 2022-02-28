@@ -25,10 +25,9 @@ class Order {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['idPedido'] = this.orderId;
     data['data'] = this.date;
     if (this.client != null) {
-      data['cliente'] = this.client!.toJson();
+      data['idCliente'] = this.client!.id;
     }
     if (this.orderItems != null) {
       data['itensDoPedido'] = this.orderItems!.map((v) => v.toJson()).toList();
@@ -60,7 +59,6 @@ class OrderItems {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['idItemDoPedido'] = this.orderItemId;
     data['quantidade'] = this.quantity;
     data['idCliente'] = this.clientId;
     if (this.product != null) {

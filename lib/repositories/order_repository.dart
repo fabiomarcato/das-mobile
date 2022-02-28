@@ -8,11 +8,7 @@ class OrderRepository {
     return await api.getOrders();
   }
 
-  Future<List<Order>> getClientOrders(String cpf) async {
-    return await api.getClientOrders(cpf);
-  }
-
-  Future<Order> insertOrder(Order order) async {
+  Future<String> insertOrder(Order order) async {
     return await api.insertOrder(order);
   }
 }

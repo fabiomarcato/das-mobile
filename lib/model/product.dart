@@ -14,6 +14,7 @@ class Product {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['descricao'] = description;
+    data['id'] = id;
     return data;
   }
 

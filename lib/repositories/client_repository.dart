@@ -8,19 +8,23 @@ class ClientRepository {
     return await api.getClient();
   }
 
-  Future<List<Client>> getClientByCpf(String cpf) async {
+  Future<Client> getClientByCpf(String cpf) async {
     return await api.getClientByCpf(cpf);
+  }
+
+  Future<List<Client>> getClientByCpfList(String cpf) async {
+    return await api.getClientByCpfList(cpf);
   }
 
   Future<String> insertClient(Client client) async {
     return await api.insertClient(client);
   }
 
-    Future<String> deleteClient(int id) async {
-   return await api.DeleteClient(id);
+  Future<String> deleteClient(int id) async {
+    return await api.DeleteClient(id);
   }
 
-    Future<String> editClient(Client client, int id) async {
-   return await api.EditClient(client, id);
+  Future<String> editClient(Client client, int id) async {
+    return await api.EditClient(client, id);
   }
 }
