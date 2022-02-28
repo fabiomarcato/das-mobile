@@ -47,7 +47,7 @@ class _HomeClientState extends State<HomeClient> {
 
   _RemoveCliente(int id) async {
     DialogsProgress.showLoadingDialog(context, false, "Removendo Cliente");
-    Retorno = await ClientRepository().removeClient(id);
+    Retorno = await ClientRepository().deleteClient(id);
     Retorno = _utf8Decode(Retorno);
     setState(() {});
     Navigator.of(context).pop(false);

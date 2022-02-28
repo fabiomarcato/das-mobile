@@ -32,5 +32,5 @@ class Client {
   @override
   String toString() {
     return 'Cliente{CPF: $cpf, Nome: $name, SobreNome: $lastName}';
-  } 
+  }
 }

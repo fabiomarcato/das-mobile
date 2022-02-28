@@ -1,4 +1,5 @@
 import 'api.dart';
+import 'dart:convert';
 import '../model/order.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,15 +14,15 @@ class OrderRest {
     }
   }
 
-  Future<Order> insertOrder(Order order) async {
+  Future<String> insertOrder(Order order) async {
     final http.Response response =
         await http.post(Uri.http(API.baseUrl, API.endpointOrders),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: order.toJson());
-    if (response.statusCode == 201) {
-      return Order.fromJson(response.body as Map<String, dynamic>);
+            body: jsonEncode(order.toJson()));
+    if (response.statusCode == 200) {
+      return json.decode(response.body)['Status'];
     } else {
       throw Exception('Erro inserindo pedido.');
     }

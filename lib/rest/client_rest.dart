@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 
 class ClientRest {
   Future<List<Client>> getClient() async {
-    final http.Response response =
-        await http.get(Uri.http(API.baseUrl, API.endpointClient),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=latin1',
-            });
+    final http.Response response = await http.get(
+        Uri.http(API.baseUrl, API.endpointClient),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=latin1',
+        });
     if (response.statusCode == 200) {
       return Client.fromJsonList(response.body);
     } else {
@@ -17,16 +17,15 @@ class ClientRest {
     }
   }
 
-  Future<Client> getClientByCpf(String cpf) async {
+  Future<List<Client>> getClientByCpf(String cpf) async {
     final http.Response response = await http
         .get(Uri.http(API.baseUrl, API.endpointCpfClient + '/' + cpf));
     if (response.statusCode == 200) {
-      return Client.fromJson(response.body as Map<String, dynamic>);
+      return Client.fromJsonList(response.body);
     } else {
       throw Exception('Erro buscando Cliente por CPF.');
     }
   }
-
 
   Future<String> insertClient(Client client) async {
     final http.Response response =
@@ -36,25 +35,17 @@ class ClientRest {
             },
             body: jsonEncode(client.toJson()));
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return json.decode(response.body)['Status'];
-    } else {
-      return json.decode(response.body)['Erro'];
-    }
+    return response.body;
   }
 
-  Future<String> RemoveClient(int id) async {
+  Future<String> DeleteClient(int id) async {
     final http.Response response = await http.delete(
         Uri.http(API.baseUrl, API.endpointClient + "/" + id.toString()),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         });
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return json.decode(response.body)['Status'];
-    } else {
-      return json.decode(response.body)['Erro'];
-    }
+    return response.body;
   }
 
   Future<String> EditClient(Client client, int id) async {
@@ -65,10 +56,6 @@ class ClientRest {
         },
         body: jsonEncode(client.toJson()));
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return json.decode(response.body)['Status'];
-    } else {
-      return json.decode(response.body)['Erro'];
-    }
+    return response.body;
   }
 }
