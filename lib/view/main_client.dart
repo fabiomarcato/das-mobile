@@ -27,7 +27,7 @@ class _HomeClientState extends State<HomeClient> {
 
   _SalvarCliente() async {
     DialogsProgress.showLoadingDialog(context, false, "Salvando Cliente");
-    final Client NovoCliente = Client(s
+    final Client NovoCliente = Client(
         cpf: _cpf.text, name: _nome.text, lastName: _sobreNome.text, id: 0);
     Retorno = await ClientRepository().insertClient(NovoCliente);
     Retorno = _utf8Decode(Retorno);
