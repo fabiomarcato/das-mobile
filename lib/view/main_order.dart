@@ -85,7 +85,7 @@ class _HomeOrder extends State<HomeOrder> {
                               ClientRepository();
                           try {
                             _client = await clientRepository
-                                .getClientByCpf(_searchCpf.text);
+                                .getClientByCpfList(_searchCpf.text);
                             setState(() {
                               _clientName = _client?[0].name! as String;
                               _clientCpf = _client?[0].cpf! as String;

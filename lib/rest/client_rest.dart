@@ -17,7 +17,17 @@ class ClientRest {
     }
   }
 
-  Future<List<Client>> getClientByCpf(String cpf) async {
+  Future<Client> getClientByCpf(String cpf) async {
+    final http.Response response = await http
+        .get(Uri.http(API.baseUrl, API.endpointCpfClient + '/' + cpf));
+    if (response.statusCode == 200) {
+      return Client.fromJson(response.body as Map<String, dynamic>);
+    } else {
+      throw Exception('Erro buscando Cliente por CPF.');
+    }
+  }
+
+  Future<List<Client>> getClientByCpfList(String cpf) async {
     final http.Response response = await http
         .get(Uri.http(API.baseUrl, API.endpointCpfClient + '/' + cpf));
     if (response.statusCode == 200) {
