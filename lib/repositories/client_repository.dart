@@ -8,7 +8,7 @@ class ClientRepository {
     return await api.getClient();
   }
 
-  Future<Client> getClientByCpf(String cpf) async {
+  Future<List<Client>> getClientByCpf(String cpf) async {
     return await api.getClientByCpf(cpf);
   }
 
