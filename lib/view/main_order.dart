@@ -100,7 +100,7 @@ class _HomeOrder extends State<HomeOrder> {
                                   _createProductControllers(_products);
                             });
                           } catch (e) {
-                            showError(context, '', 'Nenhum Cliente encontrado');
+                            showError(context, "", "Cliente não encontrado");
                           }
                         },
                         child: const Text('Pesquisar'),
