@@ -257,7 +257,7 @@ class _HomeClientState extends State<HomeClient> {
                                         decoration: InputDecoration(
                                           hintText: "CPF",
                                         ),
-                                        keyboardType: TextInputType.text,
+                                        keyboardType: TextInputType.number,
                                         validator: (value1) {
                                           if (value1!.isEmpty) {
                                             return "Obrigatório";

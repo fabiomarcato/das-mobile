@@ -17,16 +17,6 @@ class ClientRest {
     }
   }
 
-  Future<Client> getClientByCpf(String cpf) async {
-    final http.Response response = await http
-        .get(Uri.http(API.baseUrl, API.endpointCpfClient + '/' + cpf));
-    if (response.statusCode == 200) {
-      return Client.fromJson(response.body as Map<String, dynamic>);
-    } else {
-      throw Exception('Erro buscando Cliente por CPF.');
-    }
-  }
-
   Future<List<Client>> getClientByCpfList(String cpf) async {
     final http.Response response = await http
         .get(Uri.http(API.baseUrl, API.endpointCpfClient + '/' + cpf));
@@ -45,7 +35,11 @@ class ClientRest {
             },
             body: jsonEncode(client.toJson()));
 
-    return response.body;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body)['Status'];
+    } else {
+      return json.decode(response.body)['Erro'];
+    }
   }
 
   Future<String> DeleteClient(int id) async {
@@ -55,7 +49,11 @@ class ClientRest {
           'Content-Type': 'application/json; charset=UTF-8',
         });
 
-    return response.body;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body)['Status'];
+    } else {
+      return json.decode(response.body)['Erro'];
+    }
   }
 
   Future<String> EditClient(Client client, int id) async {
@@ -66,6 +64,10 @@ class ClientRest {
         },
         body: jsonEncode(client.toJson()));
 
-    return response.body;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body)['Status'];
+    } else {
+      return json.decode(response.body)['Erro'];
+    }
   }
 }

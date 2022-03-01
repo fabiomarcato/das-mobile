@@ -6,6 +6,7 @@ import '../model/order.dart';
 import '../model/client.dart';
 import '../repositories/order_repository.dart';
 import '../repositories/client_repository.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class HomeOrder extends StatefulWidget {
@@ -24,6 +25,7 @@ class _HomeOrder extends State<HomeOrder> {
   List<Product> _products = [];
   List _productControllers = [];
   Order? _order;
+  bool _isSearchButtonDisabled = true;
   final _searchCpf = TextEditingController();
 
   @override
@@ -65,6 +67,17 @@ class _HomeOrder extends State<HomeOrder> {
                         controller: _searchCpf,
                         keyboardType: TextInputType.number,
                         inputFormatters: [maskCpf],
+                        onChanged: (value) {
+                          if (value.length == 14) {
+                            setState(() {
+                              _isSearchButtonDisabled = false;
+                            });
+                          } else {
+                            setState(() {
+                              _isSearchButtonDisabled = true;
+                            });
+                          }
+                        },
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
@@ -80,29 +93,32 @@ class _HomeOrder extends State<HomeOrder> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             textStyle: const TextStyle(fontSize: 15)),
-                        onPressed: () async {
-                          final ClientRepository clientRepository =
-                              ClientRepository();
-                          try {
-                            _client = await clientRepository
-                                .getClientByCpfList(_searchCpf.text);
-                            setState(() {
-                              _clientName = _client?[0].name! as String;
-                              _clientCpf = _client?[0].cpf! as String;
-                            });
-                            final ProductRepository productRepository =
-                                ProductRepository();
-                            final List<Product> products =
-                                await productRepository.getProducts();
-                            setState(() {
-                              _products = products;
-                              _productControllers =
-                                  _createProductControllers(_products);
-                            });
-                          } catch (e) {
-                            showError(context, "", "Cliente não encontrado");
-                          }
-                        },
+                        onPressed: _isSearchButtonDisabled
+                            ? null
+                            : () async {
+                                final ClientRepository clientRepository =
+                                    ClientRepository();
+                                try {
+                                  _client = await clientRepository
+                                      .getClientByCpfList(_searchCpf.text);
+                                  setState(() {
+                                    _clientName = _client?[0].name! as String;
+                                    _clientCpf = _client?[0].cpf! as String;
+                                  });
+                                  final ProductRepository productRepository =
+                                      ProductRepository();
+                                  final List<Product> products =
+                                      await productRepository.getProducts();
+                                  setState(() {
+                                    _products = products;
+                                    _productControllers =
+                                        _createProductControllers(_products);
+                                  });
+                                } catch (e) {
+                                  showError(
+                                      context, "", "Cliente não encontrado");
+                                }
+                              },
                         child: const Text('Pesquisar'),
                       ),
                     ),
@@ -628,7 +644,7 @@ _formatProductList(products, controllers, client) {
   }
 
   return Order(
-    date: DateTime.now().toString(),
+    date: DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()).toString(),
     client: client[0],
     orderItems: orderItems,
   );
@@ -640,5 +656,14 @@ _isProductSelected(controllers) {
       return true;
     }
   }
+  return false;
+}
+
+_isCpfValid(cpf) {
+  if (cpf.length == 14) {
+    print(cpf.length);
+    return true;
+  }
+  print(cpf.length);
   return false;
 }

@@ -117,7 +117,6 @@ class _HomeProductState extends State<HomeProduct> {
             TextFormField(
               textAlign: TextAlign.center,
               controller: _description,
-              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: "Descrição",
               ),
@@ -161,7 +160,6 @@ class _HomeProductState extends State<HomeProduct> {
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             TextFormField(
               textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
               initialValue: product.description,
               decoration: InputDecoration(
                 hintText: "Descrição",

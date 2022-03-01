@@ -24,6 +24,7 @@ class _ListOrder extends State<ListOrder> {
   List<Client>? _client;
   String _clientName = '-';
   String _clientCpf = '-';
+  bool _isSearchButtonDisabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +50,21 @@ class _ListOrder extends State<ListOrder> {
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
-                          border: OutlineInputBorder(
-                          ),
+                          border: OutlineInputBorder(),
                           labelText: 'Insira o CPF do cliente',
                         ),
                         controller: _cpf,
+                        onChanged: (value) {
+                          if (value.length == 14) {
+                            setState(() {
+                              _isSearchButtonDisabled = false;
+                            });
+                          } else {
+                            setState(() {
+                              _isSearchButtonDisabled = true;
+                            });
+                          }
+                        },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -68,92 +79,92 @@ class _ListOrder extends State<ListOrder> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 15)),
-                      onPressed: () async {
-                        try {
-                          _searchClient(_cpf.text);
-                        } catch (e) {
-                          showError(context, '', e.toString());
-                        }
-                      },
+                      onPressed: _isSearchButtonDisabled
+                          ? null
+                          : () async {
+                              try {
+                                _searchClient(_cpf.text);
+                              } catch (e) {
+                                showError(context, '', e.toString());
+                              }
+                            },
                       child: const Text('Pesquisar'),
                     ),
                   ),
                 ],
               ),
             ])),
-            SliverToBoxAdapter(
-            child: Container(
-              height: 75,
-              color: Colors.white12,
-              child: Center(
-                  child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 15),
-                      height: 20.0,
-                      width: 220,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.lightBlue)),
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: Text('Nome Cliente',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center)),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 15),
-                      height: 20.0,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.lightBlue)),
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: const Text('CPF',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center)),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 25.0,
-                      width: 220,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.lightBlue)),
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: Text(_clientName,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black),
-                              textAlign: TextAlign.center)),
-                    ),
-                    Container(
-                      height: 25.0,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.lightBlue)),
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: Text(_clientCpf,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black),
-                              textAlign: TextAlign.center)),
-                    ),
-                  ],
-                )
-              ])),
-            ),
+        SliverToBoxAdapter(
+          child: Container(
+            height: 75,
+            color: Colors.white12,
+            child: Center(
+                child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 20.0,
+                    width: 220,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.lightBlue)),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Text('Nome Cliente',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            textAlign: TextAlign.center)),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 20.0,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.lightBlue)),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: const Text('CPF',
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            textAlign: TextAlign.center)),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 25.0,
+                    width: 220,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.lightBlue)),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Text(_clientName,
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                            textAlign: TextAlign.center)),
+                  ),
+                  Container(
+                    height: 25.0,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.lightBlue)),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Text(_clientCpf,
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                            textAlign: TextAlign.center)),
+                  ),
+                ],
+              )
+            ])),
           ),
+        ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
@@ -206,7 +217,7 @@ class _ListOrder extends State<ListOrder> {
     final ClientRepository clientRepository = ClientRepository();
     DialogsProgress.showLoadingDialog(context, false, "Buscando cliente");
     try {
-      _client = await clientRepository.getClientByCpf(cpf);
+      _client = await clientRepository.getClientByCpfList(cpf);
       _searchOrders(cpf);
       _clientName = _client![0].name!;
       _clientCpf = _client![0].cpf!;
@@ -238,7 +249,7 @@ class _ListOrder extends State<ListOrder> {
     }
   }
 
-  _resetClientInfo(){
+  _resetClientInfo() {
     _clientName = '-';
     _clientCpf = '-';
   }
