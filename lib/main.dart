@@ -1,3 +1,4 @@
+import 'package:dasmobile/view/main_home.dart';
 import 'package:flutter/material.dart';
 import 'view/main_client.dart';
 import 'view/main_order.dart';
@@ -54,17 +55,10 @@ class MyStatelessWidget extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: <Widget>[
+          children: const <Widget>[
             Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                  Text("Edson Flausino Dias Junior"),
-                  Text("Fábio Sanchez Marcato"),
-                  Text("Jorge Miguel Carvalho Hernandes"),
-                  Text("Marcello Santos Leite Ribeiro"),
-                  Text("Valdir Pedroso")
-                ])),
+              child: Home(),
+            ),
             Center(
               child: HomeClient(),
             ),
